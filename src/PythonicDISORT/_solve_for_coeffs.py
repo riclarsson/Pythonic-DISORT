@@ -6,7 +6,7 @@ import scipy as sc
 from math import pi
 
 
-def _solve_for_coefs(
+def _solve_for_coeffs(
     NFourier,
     G_collect,
     K_collect,
@@ -35,6 +35,7 @@ def _solve_for_coefs(
 
     """
     ################################## Solve for coefficients of homogeneous solution ##########################################
+    ############# Refer to Section 3.6.2 (single-layer) and 4 (multi-layer) of the Comprehensive Documentation #################
     
     GC_collect = np.empty((NFourier, NLayers, NQuad, NQuad))
     use_sparse_framework = NLayers >= use_sparse_NLayers
@@ -50,6 +51,7 @@ def _solve_for_coefs(
             B_collect_m = B_collect[m, :, :]
             
         # Generate mathscr_D and mathscr_X (BDRF terms)
+        # Just for this part, refer to Section 3.4.2 of the Comprehensive Documentation 
         # --------------------------------------------------------------------------------------------------------------------------
         if BDRF_bool:
             mathscr_D_neg = (1 + m_equals_0 * 1) * BDRF_Fourier_modes[m](mu_arr_pos, -mu_arr_pos)
@@ -173,7 +175,7 @@ def _solve_for_coefs(
             RHS = np.concatenate([b_neg_m, RHS_middle, b_pos_m]) + _mathscr_v_contribution
         # --------------------------------------------------------------------------------------------------------------------------
         
-        # Assemble LHS
+        # Assemble LHS (much of this code is replicated in Section 4 of the Comprehensive Documentation)
         dim = NLayers * NQuad
 
         G_0_nn = G_collect_m[0, N:, :N]
@@ -284,7 +286,7 @@ def _solve_for_coefs(
             # Solve the system
             C_m = sc.sparse.linalg.spsolve(LHS.tocsr(), RHS).reshape(NLayers, NQuad)
         
-        else:
+        else:            
             LHS = np.zeros((dim, dim))
 
             # BCs for the entire atmosphere

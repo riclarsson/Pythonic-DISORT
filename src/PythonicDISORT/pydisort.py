@@ -98,6 +98,12 @@ def pydisort(
         the Cauchy / Fourier convergence evaluation (type: float) for the last Fourier term.
 
     """
+    ############################### Size of every array #########################################
+    
+    
+    
+    
+    
     if _is_compatible_with_autograd:
         import autograd.numpy as np
     else:
@@ -137,7 +143,7 @@ def pydisort(
     atmos_is_multilayered = NLayers > 1
     # --------------------------------------------------------------------------------------------------------------------------
 
-    # Input checks
+    # Input checks (refer to Section 1 of the Comprehensive Documentation)
     # --------------------------------------------------------------------------------------------------------------------------
     # Optical depths and thickness must be positive
     assert np.all(tau_arr > 0)
@@ -191,6 +197,7 @@ def pydisort(
     NBDRF = len(BDRF_Fourier_modes)
     weighted_Leg_coeffs_all = (2 * np.arange(NLeg_all) + 1) * Leg_coeffs_all
     Leg_coeffs = Leg_coeffs_all[:, :NLeg]
+    # The following is explained in Section 1.4 of the Comprehensive Documentation
     if (b_pos_is_scalar and b_pos == 0) and (b_neg_is_scalar and b_neg == 0) and not there_is_iso_source and there_is_beam_source:
         I0_orig = I0
         I0 = 1
@@ -198,7 +205,7 @@ def pydisort(
         I0_orig = 1
     # --------------------------------------------------------------------------------------------------------------------------
     
-    # Generation of Double Gauss-Legendre quadrature weights and points
+    # Generation of "double-Gauss" quadrature weights and points (refer to Section 3.4 of the Comprehensive Documentation)
     # --------------------------------------------------------------------------------------------------------------------------
     # For positive mu values (the weights are identical for both domains)
     mu_arr_pos, W = subroutines.Gauss_Legendre_quad(N)  # mu_arr_neg = -mu_arr_pos
@@ -210,6 +217,7 @@ def pydisort(
     # --------------------------------------------------------------------------------------------------------------------------
 
     # Delta-M scaling; there is no scaling if f = 0
+    # Refer to Sections 1.3.1 and 3.3 of the Comprehensive Documentation
     # --------------------------------------------------------------------------------------------------------------------------
     if np.any(f_arr > 0):
         scale_tau = 1 - omega_arr * f_arr
@@ -231,7 +239,8 @@ def pydisort(
     
     if NT_cor and not only_flux and there_is_beam_source and np.any(f_arr > 0) and NLeg < NLeg_all:
         
-        ############################### Perform NT corrections on the intensity but not the flux ###################################
+        ############################### Perform NT corrections on the intensity but not the flux ###############################
+        ############################### Refer to Section 3.7.2 of the Comprehensive Documentation ##############################
         
         # Delta-M scaled solution; no further corrections to the flux
         flux_up, flux_down, u0, u_star = _assemble_solution_functions(
@@ -324,16 +333,25 @@ def pydisort(
             # TODO: Despite being vectorized and despite many attempts at further optimization,
             # this block of code is slower than desired and is the bottleneck for the TMS correction.
             # --------------------------------------------------------------------------------------------------------------------------
+            solution = (
+                mathscr_B[:, l, :] * np.vstack((TMS_correction_pos, TMS_correction_neg))[:, :, None]
+            )
+            
             if atmos_is_multilayered:
                 layers_arr = np.arange(NLayers)[:, None]
                 pos_contribution_mask = (l[None, :] < layers_arr).ravel()
                 neg_contribution_mask = (l[None, :] > layers_arr).ravel()
+                any_pos_contribution = np.any(pos_contribution_mask)
+                any_neg_contribution = np.any(neg_contribution_mask)
+            
+                if not (any_pos_contribution or any_neg_contribution):
+                    return solution
 
                 layers_arr_repeat = np.repeat(layers_arr, Ntau)
                 scaled_tau_tile = np.tile(scaled_tau, NLayers)
                 scaled_tau_arr_with_0_repeat = np.repeat(scaled_tau_arr_with_0, Ntau)
 
-                if np.any(pos_contribution_mask):
+                if any_pos_contribution:
                     contribution_from_each_other_layer_pos = np.zeros((N, NLayers * Ntau, Nphi))
                     scaled_tau_l_tile_pos = scaled_tau_tile[pos_contribution_mask]
                     mathscr_B_l_repeat_posmasked = mathscr_B[
@@ -365,7 +383,7 @@ def pydisort(
                         contribution_from_each_other_layer_pos.reshape((N, NLayers, Ntau, Nphi)),
                         axis=1,
                     )
-                if np.any(neg_contribution_mask):
+                if any_neg_contribution:
                     contribution_from_each_other_layer_neg = np.zeros((N, NLayers * Ntau, Nphi))
                     scaled_tau_l_tile_neg = scaled_tau_tile[neg_contribution_mask]
                     mathscr_B_l_repeat_negmasked = mathscr_B[
@@ -399,29 +417,27 @@ def pydisort(
                     )
 
                 if _is_compatible_with_autograd:
-                    solution = (
-                        mathscr_B[:, l, :]
-                        * np.vstack((TMS_correction_pos, TMS_correction_neg))[:, :, None]
-                    )
-                    solution[:N, :, :] += contribution_from_other_layers_pos
-                    solution[N:, :, :] += contribution_from_other_layers_neg
+                    if any_pos_contribution:
+                        solution[:N, :, :] += contribution_from_other_layers_pos
+                    if any_neg_contribution:
+                        solution[N:, :, :] += contribution_from_other_layers_neg
                     return solution
 
                 else:
-                    return mathscr_B[:, l, :] * np.vstack((TMS_correction_pos, TMS_correction_neg))[
-                        :, :, None
-                    ] + np.concatenate(
+                    if not any_pos_contribution:
+                        TMS_correction_pos = np.zeros((N, Ntau, Nphi))
+                    if not any_neg_contribution:
+                        TMS_correction_neg = np.zeros((N, Ntau, Nphi))
+                    return solution + np.concatenate(
                         (contribution_from_other_layers_pos, contribution_from_other_layers_neg),
                         axis=0,
                     )
+
                     
             # --------------------------------------------------------------------------------------------------------------------------
             
             else:
-                return (
-                    mathscr_B[:, l, :]
-                    * np.vstack((TMS_correction_pos, TMS_correction_neg))[:, :, None]
-                )
+                return solution
         # --------------------------------------------------------------------------------------------------------------------------
 
         # IMS correction

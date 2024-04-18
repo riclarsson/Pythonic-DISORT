@@ -4,7 +4,7 @@ from math import pi
 from numpy.polynomial.legendre import leggauss
 
 
-def transform_interval(arr, c, d, a=-1, b=1):
+def transform_interval(arr, c, d, a, b):
     """Affine transformation of an array from interval [a, b] to [c, d].
 
     Parameters
@@ -29,7 +29,7 @@ def transform_interval(arr, c, d, a=-1, b=1):
     return (((arr - a) * (d - c)) / (b - a)) + c
 
 
-def transform_weights(weights, c, d, a=-1, b=1):
+def transform_weights(weights, c, d, a, b):
     """Transforms an array of quadrature weights from interval [a, b] to [c, d].
 
     Parameters
@@ -258,6 +258,7 @@ def generate_diff_act_flux_funcs(u0):
 
 def _mathscr_v(tau, l, s_poly_coeffs, Nscoeffs, G, K, G_inv, mu_arr, _is_compatible_with_autograd=False):
     """Particular solution for isotropic internal sources.
+    Refer to Section 3.6.1 of the Comprehensive Documentation.
     It has many seemingly redundant arguments to maximize precomputation
     in the `pydisort` function which calls it.
 

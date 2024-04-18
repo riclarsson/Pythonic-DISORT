@@ -23,6 +23,7 @@ def _diagonalize(
 
     """
     ############################### Assemble system and diagonalize coefficient matrix #########################################
+    ########################### Refer to Section 3.4.2 of the Comprehensive Documentation  #####################################
     
     # Initialization
     # --------------------------------------------------------------------------------------------------------------------------
@@ -116,7 +117,7 @@ def _diagonalize(
                 
     if len(no_shortcut_indices) > 0:
     
-        # Diagonalization of coefficient matrix
+        # Diagonalization of coefficient matrix (refer to Section 3.4.2 of the Comprehensive Documentation)
         # --------------------------------------------------------------------------------------------------------------------------
         alpha_arr = alpha_arr[: len(no_shortcut_indices), :, :]
         beta_arr = beta_arr[: len(no_shortcut_indices), :, :]
@@ -153,7 +154,7 @@ def _diagonalize(
             G_inv_collect_0[no_shortcut_indices_0, :, :] = G_inv_arr[: len(no_shortcut_indices_0), :, :]
         # --------------------------------------------------------------------------------------------------------------------------
 
-        # Particular solution for the sunbeam source
+        # Particular solution for the sunbeam source (refer to Section 3.6.1 of the Comprehensive Documentation)
         # --------------------------------------------------------------------------------------------------------------------------
         if there_is_beam_source:
             X_tilde_arr = X_tilde_arr[: len(no_shortcut_indices), :]

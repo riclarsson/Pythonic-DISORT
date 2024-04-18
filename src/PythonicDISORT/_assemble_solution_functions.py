@@ -1,6 +1,6 @@
 from PythonicDISORT.subroutines import _mathscr_v
 from PythonicDISORT._diagonalize import _diagonalize
-from PythonicDISORT._solve_for_coefs import _solve_for_coefs
+from PythonicDISORT._solve_for_coeffs import _solve_for_coeffs
 
 import numpy as np
 from math import pi
@@ -31,7 +31,7 @@ def _assemble_solution_functions(
     """This function is wrapped by the `pydisort` function.
     It should be called through `pydisort` and never directly.
     It has many seemingly redundant arguments to maximize precomputation in `pydisort`.
-    These arguments are passed on to the `_diagonalize` and `_solve_for_coefs` functions 
+    These arguments are passed on to the `_diagonalize` and `_solve_for_coeffs` functions 
     which this function wraps. See the Jupyter Notebook, especially section 3, for 
     documentation, explanation and derivation.
     
@@ -73,7 +73,7 @@ def _assemble_solution_functions(
             G_inv_collect_0 = None
         B_collect = None
             
-    GC_collect = _solve_for_coefs(
+    GC_collect = _solve_for_coeffs(
         NFourier,
         G_collect,
         K_collect,
@@ -103,7 +103,7 @@ def _assemble_solution_functions(
         
     if not only_flux:
  
-        # Construct the intensity function
+        # Construct the intensity function (refer to Section 3.7 of the Comprehensive Documentation)
         # --------------------------------------------------------------------------------------------------------------------------
         def u(tau, phi, return_Fourier_error=False):
             tau = np.atleast_1d(tau)
@@ -255,7 +255,7 @@ def _assemble_solution_functions(
             return I0_orig * np.squeeze(u0)
     # --------------------------------------------------------------------------------------------------------------------------
     
-    # Construct the flux functions
+    # Construct the flux functions (refer to Section 3.8 of the Comprehensive Documentation)
     # --------------------------------------------------------------------------------------------------------------------------
     GC_pos = GC_collect_0[:, :N, :]
     GC_neg = GC_collect_0[:, N:, :]
