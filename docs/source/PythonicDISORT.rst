@@ -1,6 +1,8 @@
 PythonicDISORT package
 ======================
 
+Installation: pip install PythonicDISORT
+
 PythonicDISORT.pydisort module
 ------------------------------
 
