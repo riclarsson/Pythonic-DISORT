@@ -460,13 +460,6 @@ def pydisort(
                     )
 
                 if _autograd_compatible:
-                    if any_pos_contribution:
-                        solution[:N, :, :] += contribution_from_other_layers_pos
-                    if any_neg_contribution:
-                        solution[N:, :, :] += contribution_from_other_layers_neg
-                    return solution
-
-                else:
                     if not any_pos_contribution:
                         TMS_correction_pos = np.zeros((N, Ntau, Nphi))
                     if not any_neg_contribution:
@@ -475,7 +468,12 @@ def pydisort(
                         (contribution_from_other_layers_pos, contribution_from_other_layers_neg),
                         axis=0,
                     )
-
+                else:
+                    if any_pos_contribution:
+                        solution[:N, :, :] += contribution_from_other_layers_pos
+                    if any_neg_contribution:
+                        solution[N:, :, :] += contribution_from_other_layers_neg
+                    return solution
                     
             # --------------------------------------------------------------------------------------------------------------------------
             

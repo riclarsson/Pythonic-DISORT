@@ -1,5 +1,3 @@
-# New repository: https://github.com/LDEO-CREW/Pythonic-DISORT
-
 # Introduction
 The PythonicDISORT package is a Discrete Ordinates Solver for the (1D) Radiative Transfer Equation in a single or multi-layer plane-parallel atmosphere.
 It is coded entirely in Python 3 and is a reimplementation instead of a wrapper.
