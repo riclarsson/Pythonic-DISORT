@@ -52,13 +52,12 @@ def test_3a():
     reorder_mu = np.argsort(mu_arr)
     mu_arr_RO = mu_arr[reorder_mu]
 
-    # By default we do not compare intensities 10 degrees around the direct beam
-    deg_around_beam_to_not_compare = 10  # This parameter changes the size of the region
+    # We may not want to compare intensities around the direct beam
+    deg_around_beam_to_not_compare = 0
     mu_to_compare = (
         np.abs(np.arccos(np.abs(mu_arr_RO)) - np.arccos(mu0)) * 180 / pi
         > deg_around_beam_to_not_compare
     )
-    
 
     
     # Load results from version 4.0.99 of Stamnes' DISORT for comparison
@@ -128,13 +127,12 @@ def test_3b():
     reorder_mu = np.argsort(mu_arr)
     mu_arr_RO = mu_arr[reorder_mu]
 
-    # By default we do not compare intensities 10 degrees around the direct beam
-    deg_around_beam_to_not_compare = 10  # This parameter changes the size of the region
+    # We may not want to compare intensities around the direct beam
+    deg_around_beam_to_not_compare = 0
     mu_to_compare = (
         np.abs(np.arccos(np.abs(mu_arr_RO)) - np.arccos(mu0)) * 180 / pi
         > deg_around_beam_to_not_compare
     )
-    
 
     
     # Load results from version 4.0.99 of Stamnes' DISORT for comparison

@@ -60,10 +60,10 @@ def test_4a():
     mu_arr, flux_up, flux_down, u0, u = PythonicDISORT.pydisort(
         tau_arr, omega_arr,
         NQuad,
-        Leg_coeffs_all,
+        Leg_coeffs_all[: NQuad + 1], # DISORT strangely does not use all moments
         mu0, I0, phi0,
         f_arr=f_arr,
-        NT_cor=NT_cor,
+        NT_cor=NT_cor
     )
     
     # mu_arr is arranged as it is for code efficiency and readability
@@ -71,13 +71,12 @@ def test_4a():
     reorder_mu = np.argsort(mu_arr)
     mu_arr_RO = mu_arr[reorder_mu]
 
-    # By default we do not compare intensities 10 degrees around the direct beam
-    deg_around_beam_to_not_compare = 10  # This parameter changes the size of the region
+    # We may not want to compare intensities around the direct beam
+    deg_around_beam_to_not_compare = 0
     mu_to_compare = (
         np.abs(np.arccos(np.abs(mu_arr_RO)) - np.arccos(mu0)) * 180 / pi
         > deg_around_beam_to_not_compare
     )
-    
 
     
     # Load results from version 4.0.99 of Stamnes' DISORT for comparison
@@ -136,10 +135,10 @@ def test_4b():
     mu_arr, flux_up, flux_down, u0, u = PythonicDISORT.pydisort(
         tau_arr, omega_arr,
         NQuad,
-        Leg_coeffs_all,
+        Leg_coeffs_all[: NQuad + 1], # DISORT strangely does not use all moments
         mu0, I0, phi0,
         f_arr=f_arr,
-        NT_cor=NT_cor,
+        NT_cor=NT_cor
     )
     
     # mu_arr is arranged as it is for code efficiency and readability
@@ -147,13 +146,12 @@ def test_4b():
     reorder_mu = np.argsort(mu_arr)
     mu_arr_RO = mu_arr[reorder_mu]
 
-    # By default we do not compare intensities 10 degrees around the direct beam
-    deg_around_beam_to_not_compare = 10  # This parameter changes the size of the region
+    # We may not want to compare intensities around the direct beam
+    deg_around_beam_to_not_compare = 0
     mu_to_compare = (
         np.abs(np.arccos(np.abs(mu_arr_RO)) - np.arccos(mu0)) * 180 / pi
         > deg_around_beam_to_not_compare
     )
-    
 
     
     # Load results from version 4.0.99 of Stamnes' DISORT for comparison
@@ -212,10 +210,10 @@ def test_4c():
     mu_arr, flux_up, flux_down, u0, u = PythonicDISORT.pydisort(
         tau_arr, omega_arr,
         NQuad,
-        Leg_coeffs_all,
+        Leg_coeffs_all[: NQuad + 1], # DISORT strangely does not use all moments
         mu0, I0, phi0,
         f_arr=f_arr,
-        NT_cor=NT_cor,
+        NT_cor=NT_cor
     )
     
     # mu_arr is arranged as it is for code efficiency and readability
@@ -223,13 +221,12 @@ def test_4c():
     reorder_mu = np.argsort(mu_arr)
     mu_arr_RO = mu_arr[reorder_mu]
 
-    # By default we do not compare intensities 10 degrees around the direct beam
-    deg_around_beam_to_not_compare = 10  # This parameter changes the size of the region
+    # We may not want to compare intensities around the direct beam
+    deg_around_beam_to_not_compare = 0
     mu_to_compare = (
         np.abs(np.arccos(np.abs(mu_arr_RO)) - np.arccos(mu0)) * 180 / pi
         > deg_around_beam_to_not_compare
     )
-    
 
     
     # Load results from version 4.0.99 of Stamnes' DISORT for comparison

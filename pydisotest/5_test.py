@@ -213,7 +213,8 @@ def test_5BDRF():
     # Optional (used)
     f_arr = Leg_coeffs_all[NQuad]
     NT_cor = True
-    BDRF_Fourier_modes=[lambda mu, neg_mup: np.full((len(mu), len(neg_mup)), 1)]
+    omega_s = 1
+    BDRF_Fourier_modes=[lambda mu, neg_mup: np.full((len(mu), len(neg_mup)), omega_s)]
 
     # Optional (unused)
     NLeg=None

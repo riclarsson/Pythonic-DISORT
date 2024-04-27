@@ -23,7 +23,7 @@ def test_11a():
     NT_cor = True
     b_neg=1
     b_pos=1
-    BDRF_Fourier_modes=[lambda mu, neg_mup: np.full((len(mu), len(neg_mup)), 0.1)]
+    BDRF_Fourier_modes=[lambda mu, neg_mup: np.full((len(mu), len(neg_mup)), 1)]
     s_poly_coeffs=np.tile(np.array([ 172311.79936609, -102511.44170512]), (NLayers, 1))
 
     # Optional (unused)
@@ -49,6 +49,7 @@ def test_11a():
         b_pos=b_pos,
         b_neg=b_neg,
         f_arr=f_arr[0],
+        BDRF_Fourier_modes=BDRF_Fourier_modes,
         s_poly_coeffs=s_poly_coeffs[0, :],
         NT_cor=True,
     )[1:]
@@ -61,6 +62,7 @@ def test_11a():
         b_pos=b_pos,
         b_neg=b_neg,
         f_arr=f_arr,
+        BDRF_Fourier_modes=BDRF_Fourier_modes,
         s_poly_coeffs=s_poly_coeffs,
         NT_cor=True,
     )[1:]
