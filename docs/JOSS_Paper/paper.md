@@ -58,6 +58,7 @@ aas-journal: Astrophysical Journal <- The name of the AAS journal.
 --->
 
 # Summary
+<!---
 The Radiative Transfer Equation (RTE) models the processes of absorption, scattering and emission 
 as electromagnetic radiation propagates through a medium. We address the 1D RTE (\ref{RTE}) 
 in a plane-parallel atmosphere and consider three sources: 
@@ -65,6 +66,19 @@ blackbody emission from the atmosphere $s(\tau)$, scattering from sunlight
 $\frac{\omega I_0}{4 \pi} p\left(\mu, \phi ;-\mu_{0}, \phi_{0}\right) \exp\left(-\mu_{0}^{-1} \tau\right)$,
 and incoming radiation from other atmospheric layers or the Earth's surface modeled by
 Dirichlet boundary conditions.
+--->
+
+The Radiative Transfer Equation (RTE) models the processes of absorption, scattering and emission 
+as electromagnetic radiation propagates through a medium. 
+Consider a plane-parallel, horizontally homogeneous atmosphere with vertical coordinate 
+$\tau$ (optical depth) increasing from top to bottom and directional coordinates $\phi$ for the azimuthal angle and $\mu=\cos\theta$ for the polar direction, 
+with $\mu > 0$ pointing up following the convention of [@STWJ1988]. 
+Given three possible sources: 
+blackbody emission from the atmosphere $s(\tau)$, 
+scattering from sunlight $\frac{\omega I_0}{4 \pi} p\left(\mu, \phi ;-\mu_{0}, \phi_{0}\right) \exp\left(-\mu_{0}^{-1} \tau\right)$,
+and/or radiation from other atmospheric layers or the Earth's surface which is modeled by Dirichlet boundary conditions,
+the diffuse intensity $u(\tau, \mu, \phi)$ propagating in direction $(\mu, \phi)$ 
+is described by the 1D RTE [Cha1960; @STWJ1988]:
 
 \begin{align}
 \begin{split}
@@ -72,6 +86,11 @@ Dirichlet boundary conditions.
 &-\frac{\omega I_0}{4 \pi} p\left(\mu, \phi ;-\mu_{0}, \phi_{0}\right) \exp\left(-\mu_{0}^{-1} \tau\right) - s(\tau)
 \end{split} \label{RTE}
 \end{align}
+
+Here $\omega$ is the single-scattering albedo and $p$ the scattering phase function. 
+These are assumed to be independent of $\tau$, i.e. homogeneous in the atmospheric layer.
+An atmosphere with $\tau$-dependent $\omega$ and $p$ can be modelled by 
+a multi-layer atmosphere with different $\omega$ and $p$ for each layer.
 
 The RTE is important in many fields of science and engineering.
 The gold standard for numerically solving the 1D RTE is the Discrete Ordinate Radiative Transfer 
@@ -85,14 +104,23 @@ $$
 u\left(\tau, \mu, \phi\right) = \sum_{m=0} u^m\left(\tau, \mu\right)\cos\left(m\left(\phi_0 - \phi\right)\right)
 $$
 
-This addresses the $\phi'$ integral in (\ref{RTE}) and decomposes the problem into solving
+and the phase function $p$ is expanded as the Legendre series:
+
+$$
+p\left(\mu, \phi ; \mu', \phi'\right) = p\left(\cos\gamma\right) \approx \sum_{\ell=0}^\text{NLeg} (2\ell + 1) g_\ell P_\ell\left(\cos\gamma\right)
+$$
+
+where $\gamma$ is the scattering angle.
+These address the $\phi'$ integral in (\ref{RTE}) and decompose the problem into solving
 
 $$
 \mu \frac{d u^m(\tau, \mu)}{d \tau}=u^m(\tau, \mu)-\int_{-1}^1 D^m\left(\mu, \mu'\right) u^m\left(\tau, \mu'\right) \mathrm{d} \mu' - Q^m(\tau, \mu) - \delta_{0m}s(\tau)
 $$
 
-for each Fourier mode of $u$. The second key step is to discretize the $\mu'$ integral using 
-some quadrature scheme; `DISORT` uses the double-Gauss quadrature scheme from @Syk1951.
+for each Fourier mode of $u$. Note that since the $D^m$ are each derived from $p$, 
+they, like $p$, are independent of $\tau$. The second key step is to discretize the 
+$\mu'$ integral using some quadrature scheme; `DISORT` 
+uses the double-Gauss quadrature scheme from @Syk1951. 
 This results in a system of ODEs that can be solved using standard methods.
 
 Our package `PythonicDISORT` is a Python 3 reimplementation of `DISORT` that replicates 
@@ -100,19 +128,23 @@ most of its functionality while being easier to install, use, and modify,
 though at the cost of computational speed. It has `DISORT`'s main features: 
 multi-layer solving, delta-M scaling, Nakajima-Tanaka (NT) corrections, only flux option, 
 isotropic internal sources (thermal sources), Dirichlet boundary conditions 
-(diffuse flux boundary sources), Bi-Directional Reflectance Function (BDRF) 
+(diffuse flux boundary sources), Bi-Directional Reflectance Function (BDRF)
 for surface reflection, and more. In addition, `PythonicDISORT` has been 
-tested against `DISORT` on `DISORT`'s own test problems. As far as we know, all
-prior attempts at creating Python interfaces for `DISORT` have focused
-on creating wrappers and `PythonicDISORT` is the first true Python reimplementation.
+tested against `DISORT` on `DISORT`'s own test problems. While there 
+exist packages that wrap `DISORT` in Python [@CM2020; @Hu2017],
+`PythonicDISORT` is `DISORT` reimplemented from scratch in Python.
 
 # Statement of need
 
-We clarify that `PythonicDISORT` is not meant to replace `DISORT`. Due to fundamental 
+`PythonicDISORT` is not meant to replace `DISORT`. Due to fundamental 
 differences between Python and FORTRAN, `PythonicDISORT`, though optimized,
 remains about an order of magnitude slower than `DISORT`. Thus, projects which
-prioritize computational speed should still use `DISORT`. Moreover, `PythonicDISORT`
-lacks `DISORT`'s latest features, most notably its pseudo-spherical correction.
+prioritize computational speed should still use `DISORT`. We will continue optimizing
+`PythonicDISORT`, and there remain avenues for code vectorization among other optimizations.
+It is unlikely that `PythonicDISORT` can achieve the speed of `DISORT` though.
+In addition, `PythonicDISORT` currently lacks `DISORT`'s latest features, 
+most notably its pseudo-spherical correction,
+though these, and other, features may be added in the future.
 
 `PythonicDISORT` is instead designed with three goals in mind.
 First, it is meant to be a pedagogical and exploratory tool. 
@@ -121,32 +153,34 @@ introduction to Radiative Transfer and Discrete Ordinates Solvers.
 Even researchers who are experienced in the field may find it useful to experiment 
 with `PythonicDISORT` before deciding whether and how to upscale with `DISORT`.
 Installation of `PythonicDISORT` through `pip` should be system agnostic
-as `PythonicDISORT`'s core dependencies are only `NumPy` and `SciPy`.
+as `PythonicDISORT`'s core dependencies are only `NumPy` [@NumPy] and `SciPy` [@SciPy].
 We also intend to implement `conda` installation. In addition, using 
 `PythonicDISORT` is as simple as calling the Python function `pydisort`. In contrast,
 `DISORT` requires FORTRAN compilers, has a lengthy and system dependent
 installation process, and each call requires shell script for compilation and execution.
 
 Second, `PythonicDISORT` is designed to be modified by users to suit their needs.
-Given that Python is a widely used high-level language, `PythonicDISORT`'s 
+Given that Python is a widely-used high-level language, `PythonicDISORT`'s 
 code should be understandable, at least more so than `DISORT`'s FORTRAN code. 
-Moreover, `PythonicDISORT` comes with a Jupyter Notebook 
-(our *Comprehensive Documentation*) that breaks down both the mathematics 
+Moreover, `PythonicDISORT` comes with a Jupyter Notebook [@JupyterNotebook]
+(our [*Comprehensive Documentation*](https://pythonic-disort.readthedocs.io/en/latest/Pythonic-DISORT.html) 
+that breaks down both the mathematics 
 and code behind the solver. Users can in theory follow the Notebook 
 to recode `PythonicDISORT` from scratch; 
 it should at least help them make modifications.
 
-Third, we intend for `PythonicDISORT` to be a testbed.
-For the same reasons given above, we expect that it is easier 
+Third, `PythonicDISORT` is intended to be a testbed.
+For the same reasons given above, it should be easier 
 to implement and test experimental features in `PythonicDISORT` than in `DISORT`.
 This should expedite research and development for `DISORT` and similar algorithms.
 
-`PythonicDISORT` was first released on PyPI and GitHub on May 30, 2023.
+`PythonicDISORT` was first released on [PyPI](https://pypi.org/project/PythonicDISORT/) 
+and [GitHub](https://github.com/LDEO-CREW/Pythonic-DISORT) on May 30, 2023.
 We know of its use in at least three ongoing projects: 
 on the Two-Stream Approximations, on atmospheric photolysis, 
 and on the topographic mapping of Mars through photoclinometry.
 We will continue to maintain and upgrade `PythonicDISORT`. Our latest version: 
-`PythonicDISORT v0.4.2` was released on Nov 28, 2023.
+`PythonicDISORT v0.7.0` was released on April 26, 2024.
 
 # Acknowledgements
 

@@ -190,7 +190,7 @@ def _solve_for_gen_and_part_sols(
             G_inv_collect_0[no_shortcut_indices_0, :, :] = G_inv_arr[: len(no_shortcut_indices_0), :, :]
         # --------------------------------------------------------------------------------------------------------------------------
 
-        # Particular solution for the sunbeam source (refer to Section 3.6.1 of the Comprehensive Documentation)
+        # Particular solution for the direct beam source (refer to Section 3.6.1 of the Comprehensive Documentation)
         # --------------------------------------------------------------------------------------------------------------------------
         if there_is_beam_source:
             X_tilde_arr = X_tilde_arr[: len(no_shortcut_indices), :]

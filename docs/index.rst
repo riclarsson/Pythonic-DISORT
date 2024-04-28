@@ -5,7 +5,7 @@
 
 Documentation for PythonicDISORT package
 ========================================
-Installation: pip `install PythonicDISORT`
+Installation: `pip install PythonicDISORT`
 
 Modules (Basic Documentation)
 =============================
