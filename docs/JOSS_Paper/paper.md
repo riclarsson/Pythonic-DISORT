@@ -102,7 +102,7 @@ First, the diffuse intensity function $u$ and phase function $p$ are expanded as
 
 $$
 \begin{aligned}
-u\left(\tau, \mu, \phi\right) &= \sum_{m=0} u^m\left(\tau, \mu\right)\cos\left(m\left(\phi_0 - \phi\right)\right)
+u\left(\tau, \mu, \phi\right) &= \sum_{m=0} u^m\left(\tau, \mu\right)\cos\left(m\left(\phi_0 - \phi\right)\right) \\
 p\left(\mu, \phi ; \mu', \phi'\right) = p\left(\cos\gamma\right) &= \sum_{\ell=0} (2\ell + 1) g_\ell P_\ell\left(\cos\gamma\right)
 \end{aligned}
 $$
@@ -142,7 +142,7 @@ prioritize computational speed should still use `DISORT`. We will continue optim
 It is unlikely that `PythonicDISORT` can be optimized to achieve the speed of `DISORT` though.
 In addition, `PythonicDISORT` currently lacks `DISORT`'s latest features, 
 most notably its pseudo-spherical correction.
-We are open to adding new features, however, and we have added a subroutine 
+We are open to adding new features, however, and we added a subroutine 
 to compute actinic fluxes to satisfy a user request.
 
 `PythonicDISORT` is instead designed with three goals in mind.
