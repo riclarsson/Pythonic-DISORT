@@ -138,11 +138,11 @@ has been reimplemented from scratch in Python.
 differences between Python and FORTRAN, `PythonicDISORT`, though optimized,
 remains about an order of magnitude slower than `DISORT`. Thus, projects which
 prioritize computational speed should still use `DISORT`. We will continue optimizing
-`PythonicDISORT`, and there remain avenues for code vectorization among other optimizations.
+`PythonicDISORT`; there remain avenues for code vectorization among other optimizations.
 It is unlikely that `PythonicDISORT` can be optimized to achieve the speed of `DISORT` though.
 In addition, `PythonicDISORT` currently lacks `DISORT`'s latest features, 
-most notably its pseudo-spherical correction.
-We are open to adding new features, however, and we added a subroutine 
+most notably its pseudo-spherical correction, though
+we are open to adding new features and we added a subroutine 
 to compute actinic fluxes to satisfy a user request.
 
 `PythonicDISORT` is instead designed with three goals in mind.
