@@ -123,7 +123,7 @@ Enhancement suggestions are tracked as [GitHub issues](https://github.com/LDEO-C
 - You may want to **include screenshots and animated GIFs** which help you demonstrate the steps or point out the part which the suggestion is related to. You can use [this tool](https://www.cockos.com/licecap/) to record GIFs on macOS and Windows, and [this tool](https://github.com/colinkeenan/silentcast) or [this tool](https://github.com/GNOME/byzanz) on Linux. <!-- this should only be included if the project has a GUI -->
 - **Explain why this enhancement would be useful** to most PythonicDISORT users. You may also want to point out the other projects that solved it better and which could serve as inspiration.
 
-The only other guideline at the moment is that PythonicDISORT should remain system agnostic and installable through a simple `pip install` command. If your contributions have dependencies, they should be similarly easy to install.
+The only other guideline at the moment is that PythonicDISORT should remain system agnostic and installable through a simple `pip install` command. If your contributions have dependencies, they should be similarly accessible and easy to install.
 
 <!-- You might want to create an issue template for enhancement suggestions that can be used as a guide and that defines the structure of the information to be included. If you do so, reference it here in the description. -->
 
