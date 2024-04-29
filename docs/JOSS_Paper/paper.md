@@ -102,8 +102,8 @@ First, the diffuse intensity function $u$ and phase function $p$ are expanded as
 
 $$
 \begin{aligned}
-u\left(\tau, \mu, \phi\right) &= \sum_{m=0} u^m\left(\tau, \mu\right)\cos\left(m\left(\phi_0 - \phi\right)\right) \\
-p\left(\mu, \phi ; \mu', \phi'\right) = p\left(\cos\gamma\right) &= \sum_{\ell=0} (2\ell + 1) g_\ell P_\ell\left(\cos\gamma\right)
+u\left(\tau, \mu, \phi\right) &\approx \sum_{m=0} u^m\left(\tau, \mu\right)\cos\left(m\left(\phi_0 - \phi\right)\right) \\
+p\left(\mu, \phi ; \mu', \phi'\right) = p\left(\cos\gamma\right) &\approx \sum_{\ell=0} (2\ell + 1) g_\ell P_\ell\left(\cos\gamma\right)
 \end{aligned}
 $$
 
@@ -137,7 +137,7 @@ has been reimplemented from scratch in Python.
 `PythonicDISORT` is not meant to replace `DISORT`. Due to fundamental 
 differences between Python and FORTRAN, `PythonicDISORT`, though optimized,
 remains about an order of magnitude slower than `DISORT`. Thus, projects which
-prioritize computational speed should still use `DISORT`. We will continue optimizing
+prioritize computational speed should still use `DISORT`. We will continue to optimize
 `PythonicDISORT`; there remain avenues for code vectorization among other optimizations.
 It is unlikely that `PythonicDISORT` can be optimized to achieve the speed of `DISORT` though.
 In addition, `PythonicDISORT` currently lacks `DISORT`'s latest features, 
