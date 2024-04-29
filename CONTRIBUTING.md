@@ -59,6 +59,8 @@ Depending on how large the project is, you may want to outsource the questioning
 
 > ### Legal Notice <!-- omit in toc -->
 > When contributing to this project, you must agree that you have authored 100% of the content, that you have the necessary rights to the content and that the content you contribute may be provided under the project license.
+>
+> The only guideline at the moment is that PythonicDISORT should remain system agnostic and installable through a simple `pip install` command. If your contributions have dependencies, they should be similarly easy to install.
 
 ### Reporting Bugs
 
