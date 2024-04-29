@@ -1,18 +1,19 @@
 # Introduction
-The PythonicDISORT package is a Discrete Ordinates Solver for the (1D) Radiative Transfer Equation in a single or multi-layer plane-parallel atmosphere.
+The PythonicDISORT package is a Discrete Ordinates Solver for the (1D) Radiative Transfer Equation 
+in a plane-parallel, horizontally homogeneous atmosphere.
 It is coded entirely in Python 3 and is a reimplementation instead of a wrapper.
 While PythonicDISORT has been optimized for speed, it will naturally be slower than similar FORTRAN algorithms.
 On the other hand, PythonicDISORT should be easier to install, use, and modify than FORTRAN-based Discrete Ordinates Solvers.
 
-PythonicDISORT is based on Stamnes' FORTRAN DISORT (see References, in particular [2, 3, 8]) and has its main features: 
-delta-M scaling, Nakajima-Tanaka (NT) corrections, only flux option, isotropic internal sources (thermal sources), 
+PythonicDISORT is based on Stamnes' FORTRAN DISORT (see References, in particular [2, 3, 8]) and has its main features: multi-layer solver, 
+delta-M scaling, Nakajima-Tanaka (NT) corrections, only flux option, direct beam source, isotropic internal source (blackbody emission), 
 Dirichlet boundary conditions (diffuse flux boundary sources), Bi-Directional Reflectance Function (BDRF) for surface reflection, and more.
-In addition, upon the request of a user, we added a subroutine to calculate actinic fluxes and we are open to further feature requests as well as feedback. 
+In addition, we added a subroutine to calculate actinic fluxes to satisfy a user request and we are open to further feature requests as well as feedback. 
 
 You may contact me, Dion, through dh3065@columbia.edu.
 
 Our **GitHub repository:** https://github.com/LDEO-CREW/Pythonic-DISORT also includes our F2PY-wrapped Stamnes DISORT (version 4.0.99) in the `disort4.0.99_f2py` directory.
-The original was downloaded from http://www.rtatmocn.com/disort/. The wrapper is inspired by https://github.com/kconnour/pyRT_DISORT.
+The original was downloaded from http://www.rtatmocn.com/disort/. Our wrapper is inspired by https://github.com/kconnour/pyRT_DISORT.
 
 # Documentation
 https://pythonic-disort.readthedocs.io/en/latest/
@@ -56,8 +57,7 @@ must be set up to run the last section (section 6).
 The PythonicDISORT package *should* be system agnostic given its minimal dependencies and pure Python code.
 We do not guarantee that our Jupyter Notebook and F2PY-wrapped Stamnes' DISORT will work on other systems though.
 The latter will almost certainly need user edits to work and in any case it requires FORTRAN compilers which
-are not included in our GitHub repository. Everything in the repository was built and tested on Windows 11 but 
-not yet tested on other systems.
+are not included in our GitHub repository. Everything in the repository was built and tested on Windows 11.
 
 # Acknowledgements
 
